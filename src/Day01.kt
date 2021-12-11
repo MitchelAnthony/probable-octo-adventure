@@ -1,17 +1,46 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    // Run against the sample input to verify the code works
+    val testInput = readInput("day1_input_sample")
+    check(calculateAmountOfIncreases(testInput) == 7)
+    check(calculateAmountOfIncreases(createWindows(testInput)) == 5)
+
+    // Run this against your personal input data to get the results printed to the standard output
+    val input = readInput("day1_input")
+    println(calculateAmountOfIncreases(input)) // part 1
+    println(calculateAmountOfIncreases(createWindows(input))) // part 2
+}
+
+fun calculateAmountOfIncreases(input: List<String>): Int {
+    var increases = 0
+    var previousMeasurement = -1
+
+    for (measurement in input) {
+        if (previousMeasurement == -1) {
+            previousMeasurement = measurement.toInt()
+
+            continue
+        }
+
+        if (measurement.toInt() > previousMeasurement) {
+            increases++
+        }
+
+        previousMeasurement = measurement.toInt()
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    return increases
+}
+
+fun createWindows(input: List<String>): List<String> {
+    val windows = emptyList<String>().toMutableList()
+    for(index in 0..input.size) {
+        if (index + 3 > input.size) {
+            break
+        }
+
+        val window = input.subList(index, index + 3)
+        windows += (window[0].toInt() + window[1].toInt() + window[2].toInt()).toString()
     }
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
-    println(part1(input))
-    println(part2(input))
+    return windows
 }
